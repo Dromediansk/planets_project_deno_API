@@ -1,5 +1,4 @@
-import * as log from "https://deno.land/std/log/mod.ts";
-import flatMap from "https://deno.land/x/lodash/flatMap.js";
+import { log, flatMap } from "../deps.ts";
 
 interface Launch {
   flightNumber: number;
