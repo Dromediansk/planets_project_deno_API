@@ -50,3 +50,20 @@ log.info(`Downloaded data for ${launches.size} SpaceX launches.`);
 export function getAllLaunches() {
   return Array.from(launches.values());
 }
+
+export function getLaunchById(launchId: number) {
+  if (launches.has(launchId)) {
+    return launches.get(launchId);
+  }
+  return null;
+}
+
+export function addLaunch(launchData: Launch) {
+  launches.set(
+    launchData.flightNumber,
+    Object.assign(launchData, {
+      upcoming: true,
+      customers: ["Zero to Mastery, NASA"],
+    }),
+  );
+}

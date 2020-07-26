@@ -1,3 +1,4 @@
+// @ts-nocheck
 let launches;
 
 const numberHeading = "No.".padStart(5);
@@ -14,19 +15,23 @@ function initValues() {
   launchDaySelector.setAttribute("value", today);
 }
 
-function loadLaunches() {
-  // TODO: Once API is ready.
-  // Load launches and sort by flight number.
+async function loadLaunches() {
+  const response = await fetch("/launches", {
+    method: "GET",
+  });
+  const fetchedLaunches = await response.json();
+  launches = fetchedLaunches.sort((a, b) => {
+    return a.flightNumber < b.flightNumber;
+  });
 }
 
 async function loadPlanets() {
-  // TODO: Once API is ready.
   const response = await fetch("/planets", {
     method: "GET",
   });
   const planets = await response.json();
   const planetSelector = document.getElementById("planets-selector");
-  planets.forEach((planet) => {
+  return planets.forEach((planet) => {
     planetSelector.innerHTML +=
       `<option value="${planet.kepler_name}">${planet.kepler_name}</option>`;
   });
@@ -37,15 +42,32 @@ function abortLaunch() {
   // Delete launch and reload launches.
 }
 
-function submitLaunch() {
+async function submitLaunch() {
   const target = document.getElementById("planets-selector").value;
   const launchDate = new Date(document.getElementById("launch-day").value);
   const mission = document.getElementById("mission-name").value;
   const rocket = document.getElementById("rocket-name").value;
   const flightNumber = launches[launches.length - 1].flightNumber + 1;
 
-  // TODO: Once API is ready.
-  // Submit above data to launch system and reload launches.
+  await fetch("/launches", {
+    method: "post",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      launchDate: Math.floor(launchDate / 1000),
+      flightNumber,
+      mission,
+      rocket,
+      target,
+    }),
+  });
+
+  (await function () {
+    document.getElementById("launch-success").hidden = false;
+  })();
+
+  await loadLaunches();
 }
 
 function listUpcoming() {
