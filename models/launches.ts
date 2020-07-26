@@ -67,3 +67,13 @@ export function addLaunch(launchData: Launch) {
     }),
   );
 }
+
+export function deleteLaunchById(launchId: number) {
+  const abortedLaunch = launches.get(launchId);
+
+  if (abortedLaunch) {
+    abortedLaunch.upcoming = false;
+    abortedLaunch.success = false;
+  }
+  return abortedLaunch;
+}
