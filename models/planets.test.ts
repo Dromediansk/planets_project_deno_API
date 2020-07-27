@@ -1,6 +1,6 @@
 import {
   assertEquals,
-} from "../test_deps.ts";
+} from "../src/test_deps.ts";
 
 import { filterHabitablePlanets } from "./planets.ts";
 
